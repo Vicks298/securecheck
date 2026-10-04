@@ -14,7 +14,7 @@ def clean_domain(raw):
     """Turn what a person pastes (a web address, a path, a port) into a plain domain."""
     d = raw.strip().lower()
     d = re.sub(r"^[a-z][a-z0-9+.-]*://", "", d)
-    d = re.split(r"[/?#]", d, 1)[0]
+    d = re.split(r"[/?#]", d, maxsplit=1)[0]
     d = d.rsplit("@", 1)[-1].split(":")[0].rstrip(".")
     return d[4:] if d.startswith("www.") else d
 
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         print(f"   {f.detail}")
         if f.severity != "Info":
             print(f"   Fix: {f.fix}")
-        print(f"   Evidence: {f.evidence[:300]}")
+        print(f"   Evidence: {f.evidence[:600]}")
         if f.limit:
             print(f"   Limit: {f.limit}")
         print()
