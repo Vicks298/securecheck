@@ -46,9 +46,11 @@ These ratings are my own rules, written in the code. They are not a published st
 
 ## Run it
 
-Needs Python 3.10 or newer.
+Needs Python 3.10 or newer and git. Type the domain, not a full web address. If you paste a web address, SecureCheck removes the `https://` and the path for you.
 
 ```
+git clone https://github.com/Vicks298/securecheck.git
+cd securecheck
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python3 run.py example.com --by "Your Name" --json before.json --pdf report.pdf

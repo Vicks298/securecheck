@@ -1,4 +1,6 @@
 import argparse
+import re
+import sys
 from checks.email_check import check_email
 from checks.tls_check import check_tls
 from checks.headers_check import check_headers
@@ -7,6 +9,15 @@ from checks.paths_check import check_paths
 from checks.lookalike_check import check_lookalikes
 from finding import Finding
 from report import sort_findings, save_json, build_pdf
+
+def clean_domain(raw):
+    """Turn what a person pastes (a web address, a path, a port) into a plain domain."""
+    d = raw.strip().lower()
+    d = re.sub(r"^[a-z][a-z0-9+.-]*://", "", d)
+    d = re.split(r"[/?#]", d, 1)[0]
+    d = d.rsplit("@", 1)[-1].split(":")[0].rstrip(".")
+    return d[4:] if d.startswith("www.") else d
+
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="Security check for a domain you own or have permission to check.")
@@ -21,7 +32,10 @@ if __name__ == "__main__":
     ap.add_argument("--ca-file", default=None, help="trust this CA file (lab demo)")
     ap.add_argument("--own", default="", help="comma-separated domains the business owns (not reported as lookalikes)")
     a = ap.parse_args()
-    domain = a.domain.strip().lower()
+    domain = clean_domain(a.domain)
+    if "." not in domain:
+        sys.exit(f"'{a.domain}' does not look like a domain. Use something like example.com")
+    print(f"Checking {domain}\n")
     own = [o for o in a.own.split(",") if o.strip()]
     resolver = None
     if a.dns:
