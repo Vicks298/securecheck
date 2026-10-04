@@ -203,7 +203,7 @@ The options `--dns`, `--https-port`, `--http-port` and `--ca-file` exist only fo
 | Email | SPF, DMARC, common DKIM selectors, MX |
 | HTTPS | Certificate trust, name match, expiry; TLS 1.0 and 1.1; HSTS; HTTP to HTTPS redirect |
 | Headers | Content-Security-Policy, clickjacking protection, X-Content-Type-Options, Referrer-Policy, server and technology disclosure, cookie flags |
-| Ports | A plain connection test to 11 common ports. Flags risky ones such as Telnet, file sharing, Remote Desktop and databases |
+| Ports | A connection test to 11 common ports. Open ports are confirmed by the service's first reply where it has a standard one (SSH, FTP, mail, MySQL, PostgreSQL, web). Flags risky ones such as Telnet, file sharing, Remote Desktop and databases |
 | Exposed files | Six common addresses (for example `/.git/HEAD`, `/.env`, backups, `phpMyAdmin`). Each is confirmed by its content, not just by a 200 answer. Contents are never stored |
 | Lookalikes | Spelling, typing and added-word variants of the domain, checked with DNS only. The lookalike sites are never opened |
 
@@ -262,7 +262,8 @@ One mismatch came up: `curl -I` (HEAD) showed a different Server header than a G
 - DKIM selectors are private names. "Not found" means not found among common names.
 - Only the home page is requested for header checks. Other pages may differ.
 - Port results depend on the network you scan from. "Filtered" is not the same as closed. On shared hosting the ports belong to the host's server.
-- If a network accepts connections on ports that should be closed, the port check refuses to report. Some home networks do this. Use another network, such as a phone hotspot.
+- The port check confirms an open port by its first reply, for example an SSH banner. If a port connects but does not give the expected reply, or a port that should be closed answers, the check refuses to report. A proxy or firewall between you and the site usually causes this. Some home networks do it. Use another network, such as a phone hotspot.
+- Telnet, file sharing (SMB), Remote Desktop and HTTPS ports have no safe standard greeting, so they are confirmed by the connection only.
 - The old-TLS test depends on the machine being able to attempt old protocols. A failed attempt does not prove the server refuses them.
 - The exposed-file check looks at six addresses. A clean result does not mean nothing is exposed.
 - A registered lookalike is not proof of abuse. It may belong to the owner. Only likely variants are tested.
