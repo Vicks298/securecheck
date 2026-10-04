@@ -10,6 +10,17 @@ Small businesses in Nigeria get hit by fake emails, unprotected websites and wea
 
 SecureCheck looks at what any outsider can already see. It turns that into a short list of fixes an owner can hand to their web host or IT person.
 
+## How it is used
+
+SecureCheck is run by a person with basic technical skill, such as a security volunteer or a business's IT helper. The business owner does not run it. The owner gets the PDF report.
+
+- Ask the owner for written permission. The consent form is `consent_form.pdf`.
+- Run the check on their domain. It takes about a minute.
+- Send them the PDF. Page one lists what to fix first, with steps their web host can follow.
+- After they make changes, run it again and use `compare.py` to show what improved.
+
+To try it without a real business, use the demo shop described below.
+
 ## What it checks
 
 | Check | What it looks at |
@@ -114,4 +125,5 @@ Only check domains you own or have written permission to check. A consent form t
 
 ## Not built yet
 
-A consented phishing awareness exercise. It needs its own consent form and real volunteers.
+- A web page where a business owner can type a domain and get the report without help.
+- A staff awareness exercise. Volunteers who agreed in advance would get a safe link, and the report would count who opened it.
