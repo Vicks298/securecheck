@@ -263,6 +263,7 @@ One mismatch came up: `curl -I` (HEAD) showed a different Server header than a G
 - Only the home page is requested for header checks. Other pages may differ.
 - Port results depend on the network you scan from. "Filtered" is not the same as closed. On shared hosting the ports belong to the host's server.
 - The port check confirms an open port by its first reply, for example an SSH banner. If a port connects but does not give the expected reply, or a port that should be closed answers, the check refuses to report. A proxy or firewall between you and the site usually causes this. Some home networks do it. Use another network, such as a phone hotspot.
+On the networks I tested from, `nmap -sT` reported all 11 ports open on `scanme.nmap.org`, a public test machine. A manual check with `nc` showed the SSH port gave a real banner, and the MySQL port gave no reply. SecureCheck refused to report and said why.
 - Telnet, file sharing (SMB), Remote Desktop and HTTPS ports have no safe standard greeting, so they are confirmed by the connection only.
 - The old-TLS test depends on the machine being able to attempt old protocols. A failed attempt does not prove the server refuses them.
 - The exposed-file check looks at six addresses. A clean result does not mean nothing is exposed.
