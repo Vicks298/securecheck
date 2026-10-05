@@ -1,4 +1,5 @@
 import argparse
+import os
 import re
 import sys
 from checks.email_check import check_email
@@ -30,8 +31,14 @@ if __name__ == "__main__":
     ap.add_argument("--https-port", type=int, default=443, help="HTTPS port (lab demo)")
     ap.add_argument("--http-port", type=int, default=80, help="HTTP port (lab demo)")
     ap.add_argument("--ca-file", default=None, help="trust this CA file (lab demo)")
+    ap.add_argument("--demo", action="store_true", help="scan the Demo Shop started with lab/shop.sh")
     ap.add_argument("--own", default="", help="comma-separated domains the business owns (not reported as lookalikes)")
     a = ap.parse_args()
+    if a.demo:  # the Demo Shop runs on this machine, with its own settings
+        a.dns = a.dns or "127.0.0.1:5353"
+        a.https_port, a.http_port = 8443, 8080
+        a.ca_file = a.ca_file or os.path.join(os.path.dirname(os.path.abspath(__file__)), "lab", "pki", "ca.pem")
+        a.only = a.only or "email,tls,headers,paths"
     domain = clean_domain(a.domain)
     if "." not in domain:
         sys.exit(f"'{a.domain}' does not look like a domain. Use something like example.com")

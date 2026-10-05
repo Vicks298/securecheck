@@ -194,7 +194,7 @@ The first command scans again. The second runs `compare.py` inside the image. It
 | `--only email,tls` | Runs only these checks. Names: `email`, `tls`, `headers`, `ports`, `paths`, `lookalike`. |
 | `--own other.com,other.ng` | Domains the business owns. They are not reported as lookalikes. |
 
-The options `--dns`, `--https-port`, `--http-port` and `--ca-file` exist only for the demo shop below.
+The options `--demo`, `--dns`, `--https-port`, `--http-port` and `--ca-file` exist only for the demo shop below.
 
 ## What it checks
 
@@ -234,6 +234,28 @@ sh lab/demo.sh "Your Name"
 The demo scans the shop before the fixes, applies them, scans again, and prints the comparison. It writes `before.pdf`, `after.pdf`, `before.json` and `after.json`. The comparison ends with `Problems: 14 before -> 0 after`.
 
 This is a demonstration of the tool and the report. It is not a result from a real business.
+
+### Run the demo by hand, step by step
+
+Use this to see each step. The virtual environment must be active.
+
+```
+sh lab/make_certs.sh
+echo "127.0.0.1 demo-shop.test" | sudo tee -a /etc/hosts
+sh lab/shop.sh weak
+python3 run.py demo-shop.test --demo --by "Your Name" --json before.json --pdf before.pdf
+sh lab/shop.sh fixed
+python3 run.py demo-shop.test --demo --by "Your Name" --json after.json --pdf after.pdf
+python3 compare.py before.json after.json
+sh lab/shop.sh stop
+```
+
+- The second line is needed only once.
+- `sh lab/shop.sh weak` starts the made-up shop with its weaknesses.
+- `--demo` points the tool at the shop on your own machine.
+- `sh lab/shop.sh fixed` starts the same shop after the fixes.
+- `compare.py` prints what was fixed.
+
 
 ## Run the tests
 
